@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CryptoLiveChart!</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+  <style>
+      .chart {
+          height: 800px;
+      }
+  </style>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-
-  <title>{% block title %}{% endblock %}</title>
+  <title>{% block title %} {{title}} {% endblock %}</title>
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -16,10 +23,36 @@
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
         
-      </div>
+      
+          
+        </div>
     </nav>
 
-    {% block content %}{% endblock %}
+    
+
+    <div class="container">
+      <h1 class="title">Welcome to <strong>Crypto</strong>LiveChart!</h1>
+      <p class="subtitle">View live prices for <strong>Bitcoin</strong> and <strong>Ethereum</strong> in real time!</p>
+      <hr>
+      <div class="columns">
+          <div class="column">
+              <h5 class="title is-6">Prices (in USD)</h5>
+              <div id="price_chart" class="chart">
+                  Graph
+              </div>
+          </div>
+          <div class="column">
+              <h5 class="title is-6">Market Cap</h5>
+              <div id="market_cap_chart" class="chart">
+                  Bar Chart
+              </div>
+          </div>
+      </div>
+      <img src="static/stonks.jpg" alt="Stonks">
+  </div>
+
+
+  
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>

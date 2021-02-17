@@ -2,7 +2,6 @@
    more information about template inheritance. #}
 {% extends "base.html" %}
 
+{% block title %} {{title}} {% endblock %}
 
-{% block content %}
-MUCH BULL
-{% endblock %}
+{% block content %} Bugs found over the past {{ bars_count }} {%endblock%}
