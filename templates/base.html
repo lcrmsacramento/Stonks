@@ -1,15 +1,66 @@
 <!DOCTYPE html>
 <html>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CryptoLiveChart!</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-  <style>
-      .chart {
-          height: 800px;
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CryptoLiveChart!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <title>{% block title %} {{title}} {% endblock %}</title>
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/site.css') }}" rel="stylesheet">
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
+    <script type="text/javascript">
+      window.onload = function () {
+        var dataPoints = [];
+        var stockChart = new CanvasJS.StockChart("stockChartContainer",{
+          theme: "light2", //"light1", "dark1", "dark2"
+          title:{
+            text:"Ethereum Closing Price"
+          },
+          charts: [{
+            axisX: {
+              crosshair: {
+                enabled: true,
+                snapToDataPoint: true
+              }
+            },
+            axisY: {
+              prefix: "$",
+              crosshair: {
+                enabled: true,
+                snapToDataPoint: true,
+                valueFormatString: "$#,###.##"
+              }
+            },
+            toolTip: {
+              shared: true
+            },
+            data: [{
+              type: "spline",
+              name: "Price",
+              yValueFormatString: "$#,###.##",
+              dataPoints : dataPoints
+            }]
+          }],
+          navigator: {
+            slider: {
+              minimum: new Date(2018, 08, 01),
+              maximum: new Date(2018, 10, 01)
+            }
+          }
+        });
+        $.getJSON("https://canvasjs.com/data/docs/ethusd2018.json", function(data) {
+          for(var i = 0; i < data.length; i++){
+            dataPoints.push({x: new Date(data[i].date), y: Number(data[i].close)});
+          }
+          stockChart.render();
+        });
       }
-  </style>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-  <title>{% block title %} {{title}} {% endblock %}</title>
+      </script>
+  </head>
   <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,13 +73,8 @@
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
-        
-      
-          
         </div>
     </nav>
-
-    
 
     <div class="container">
       <h1 class="title">Welcome to <strong>Stonks</strong>!</h1>
@@ -48,12 +94,55 @@
               </div>
           </div>
       </div>
+    </div>
+
+    <div id="stockChartContainer" style="height: 450px; width: 100%;"></div>
+    <img id="loader" src="https://canvasjs.com/wp-content/uploads/images/gallery/javascript-stockcharts/overview/loading.gif" style="position: absolute; top: 150px; left: 48%; display: none"/>
+
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header class="masthead mb-auto">
+        <div class="inner">
+          <h3 class="masthead-brand">Financial Demo</h3>
+          <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link active" href="#">Home</a>
+            <nav>
+        </div>
+      </header>
+      <div id="widgetContent">
+        <main role="main" class="inner">
+          <h1 class="cover-heading">Financial Widget</h1>
+          <p class="lead">A Python and Flask based Stock Quote Module</p>
+          <p>This financial widget was built by creating a simple API using Python and Flask.  The HTML5 UI uses Bootstrap, jQuery and Highcharts.</p>
+          <div class="input-group mb-3">
+            <input id="symbol" type="text" class="form-control" placeholder="Enter Stock ETF or Mutual Fund Symbol" aria-label="Stock, ETF or Mutual Fund" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" onclick="site.SubmitForm();">Search</button>
+            </div>
+          </div>
+          <div id="chart_container"></div>
+        </main>
+      </div>
       
     </div>
 
-    
-    <img src="static/stonks.jpg" alt="Stonks">
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
+    <script src="{{ url_for('static',    filename='scripts/site.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js" integrity="sha384-KsvD1yqQ1/1+IA7gi3P0tyJcT3vR+NdBTt13hSJ2lnve8agRGXTTyNaBYmCR/Nwi" crossorigin="anonymous"></script>
